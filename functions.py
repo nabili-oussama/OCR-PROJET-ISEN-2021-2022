@@ -135,32 +135,35 @@ class Preprocessing :
 
 class IHWCGenerator :
 
-    def ligneText(image, step):
+    def ligneText(image):
         """
+        Permet de localiser les coordonnées qui délimitent chaque ligne 
+	    de texte et ignore les lignes vides.
         
         Parameters:
-            
-        returns:
+        image : fichier image (charger depuis la fonction chargerImage)
+    
+        Returns:
+        Retourne une liste contenant les coordonnées de début et de fin 
+        de chaque ligne de texte
         
         """
         liste = []
-        cordonnees = []
         images = []
-        (dimX,dimY) = image.shape
-        marge = margeLigne(image)
+        
         i = 0
         j = 0
-        while(i < dimX):
-            while(i < dimX and image[i,5] == 255):
+        while(i < image.dimX):
+            while(i < image.dimX and image.image[i,5] == 255):
                 i = i + 1
             debutG = i
-            while(j < dimX and image[j,dimY-5] == 255):
+            while(j < image.dimX and image.image[j,image.dimY-5] == 255):
                 j = j + 1
             debutD = j        
-            while(i < dimX and image[i,5] == 0):
+            while(i < image.dimX and image.image[i,5] == 0):
                 i = i+1
             finG = i
-            while(j < dimX and image[j,dimY-5] == 0):
+            while(j < image.dimX and image.image[j,image.dimY-5] == 0):
                 j = j+1
             finD = j
     
@@ -168,34 +171,34 @@ class IHWCGenerator :
             #print(debutG, debutD , finG, finD)
             
             liste.append((min(debutG, debutD) , max(finG, finD) ))
-        print(liste)    
+        #print(liste)    
         i = 0
         while(i < len(liste)-1):
             (d1 , f1) = liste[i]
             (d2 , f2) = liste[i+1]
-            if (f1 < d2 and f1 < dimX and d2 < dimX):
-                cordonnees.append( ( f1 , d2 ) )
+            if (f1 < d2 and f1 < image.dimX and d2 < image.dimX and np.mean(image.image[f1:d2,:]) < 254):
+                images.append( ( f1 , d2 ) )
             i = i+1
-        #print(liste)
-        
-        i = 0
-        while(i < len(cordonnees)):
-            (d,f) = cordonnees[i]
-            if(np.mean(image[d:f,:]) < 254):
-                images.append( image[d:f,:])
-            i= i + 1
+            
         return images
     
     
     
-    def contourIndiceEntier(contours):
+    def contourIndiceEntier(image):
         """
+        Génére une liste de listes de réels contenant chaqune les coordonnées des contours de chaque 
+		caractère, puis convertit ces réels en entiers et les trie en ordre croissant puis supprime 
+	    les doublons.
         
         Parameters:
-            
-        returns:
+        image : fichier image (charger depuis la fonction chargerImage)
+    
+        Returns:
+        Retourne une liste de listes contenant les coordonnées des contours (intérieur et extérieur) 
+	    de chaque caractère
         
         """
+	    contours = measure.find_contours(image.image, 0.8)
         resultats = []
         ensembles = []
         for contour in contours:
@@ -207,14 +210,21 @@ class IHWCGenerator :
             ensembles.append(ensemble)
         return ensembles
     
-    def estInclu(ensemble1 , ensemble2): # ensemble 1 inclu dans l'ensemble 2 ?
+    def estInclu(ensemble1 , ensemble2):
         """
+        Vérifie si le contour ensemble1 est inclu dans le contour ensemble2 
+	    en comparant leurs extrémités.
         
         Parameters:
-            
-        returns:
+        ensemble1 : liste des coordonnées d'un contour
+		ensemble2 : liste des coordonnées d'un contour
+    
+        Returns:
+        Retourne True si ensemble1 est inclu dans ensemble2, 
+        False sinon
         
-        """        
+        """
+        
         Xensemble1 = [ l[0] for l in ensemble1 ]
         Yensemble1 = [ l[1] for l in ensemble1 ]
         XminEnsemble1 = min(Xensemble1)
@@ -227,17 +237,23 @@ class IHWCGenerator :
         XminEnsemble2 = min(Xensemble2)
         XmaxEnsemble2 = max(Xensemble2)
         YminEnsemble2 = min(Yensemble2)
-        YmaxEnsemble2 = max(Yensemble2)        
+        YmaxEnsemble2 = max(Yensemble2)
+		   
         if (XminEnsemble1 > XminEnsemble2 and YminEnsemble1 > YminEnsemble2 and XmaxEnsemble1 < XmaxEnsemble2 and YmaxEnsemble1 < YmaxEnsemble2):
             return True
         return False
     
-    def indicesEnsemblesInculus(ensembles):
-        """
-        
+    def indicesEnsemblesInclus(ensembles):
+		"""
+        Fait appel à la fonction estInclu pour vérifier si un contour est un contour intérieur et stock son
+		indice dans une nouvelle liste.
+         
         Parameters:
-            
-        returns:
+        ensembles (ndarray) : liste de listes contenant les coordonnées des contours (intérieur et extérieur) 
+	    de chaque caractère
+    
+        Returns:
+        Retourne une liste contenant les indices des contours intérieurs dans la liste 'ensembles'
         
         """
         nbr = len(ensembles)
@@ -249,7 +265,7 @@ class IHWCGenerator :
                     indicesInclus.append(i)
         return indicesInclus
     
-indicesInclus = indicesEnsemblesInculus(ensembles)
+#indicesInclus = indicesEnsemblesInculus(ensembles)
     
 """rida = imageVide(Simo.shape)
     
@@ -266,15 +282,19 @@ afficherImage(rida)"""
     
     
     def supprimerEnsemblesInclus(ensembles):
-        """
-        
+		"""
+        Fait appel à la fonction indicesEnsemblesInclus pour supprimer les listes des contours intérieurs.
+         
         Parameters:
-            
-        returns:
+        ensembles (ndarray) : liste de listes contenant les coordonnées des contours (intérieur et extérieur) 
+	    de chaque caractère
+    
+        Returns:
+        Retourne une liste de listes contenant les coordonnées des contours extérieurs uniquement.
         
         """
         resultat = ensembles.copy()
-        indices =   indicesEnsemblesInculus(resultat)   
+        indices =   indicesEnsemblesInclus(resultat)   
         for i in range(len(indices) -1,-1,-1):
             indice = indices[i]
             resultat.pop(indice)
