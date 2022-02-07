@@ -45,7 +45,7 @@ class Preprocessing :
     def afficherImage(self):
         
         """
-        Une methode utilisé pour afficher une image dans une fenêtre.
+        Une méthode utilisé pour afficher une image dans une fenêtre.
         La fenêtre s'adapte automatiquement à la taille de l'image.
         
         
@@ -110,7 +110,7 @@ class Preprocessing :
     
     def imageVide(self,dim):
         """
-        Une mèthode qui permet de creer une image vide.
+        Une méthode qui permet de creer une image vide.
         Matrice de 255.
         
         Parameters:
