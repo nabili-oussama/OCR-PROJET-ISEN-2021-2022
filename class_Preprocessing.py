@@ -45,10 +45,8 @@ class Preprocessing :
     def afficherImage(self):
         
         """
-        Une méthode utilisé pour afficher une image dans une fenêtre.
-        La fenêtre s'adapte automatiquement à la taille de l'image.
-        
-        
+        Lance et ferme la fenêtre de l'image.
+    
         Parameters:
         image : fichier image (charger depuis la fonction chargerImage)
     
