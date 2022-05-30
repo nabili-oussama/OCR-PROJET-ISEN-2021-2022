@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Feb  2 11:14:53 2022
-@author: oussa
+@author: oussama nabili - reda zerrari - harith jadid
 """
 from class_Preprocessing import Preprocessing
 
@@ -11,17 +11,17 @@ from skimage import measure
 
 class IHWCGenerator :
 
-    def ligneText(image):
+    def lineText(image):
         """
-        Permet de localiser les coordonnées qui délimitent chaque ligne 
-	    de texte et ignore les lignes vides et de générer leur image. 
+        Allows you to locate the coordinates that delimit each line of text 
+	and ignore empty lines and generate their image.
         
         Parameters:
-        image : fichier image (charger depuis la fonction chargerImage)
+        image : image file (loaded from loadImage function)
     
         Returns:
-        Retourne une liste contenant les coordonnées sous forme de tuple de début et de fin 
-        et une autre liste contenant l'image de chaque ligne de texte
+        Returns a list containing the coordinates as a start and end tuple 
+	and another list containing the image of each line of text
         
         
         """
@@ -67,7 +67,7 @@ class IHWCGenerator :
 	    les doublons.
         
         Parameters:
-        image : fichier image (charger depuis la fonction chargerImage)
+        image : fichier image (charger depuis la fonction loadImage)
     
         Returns:
         Retourne une liste de listes contenant les coordonnées des contours (intérieur et extérieur) 
