@@ -294,20 +294,19 @@ class IHWCGenerator :
 
         return resultats
          
-""" not done ||
-	     \/  """
+
 	
-    def rebuildImageLetter(ensembles , imgLigne, Ligne):
+    def rebuildImageLetter(ensembles , imgLine, Line):
         """
-        Permet de générer une image pour chaque caractère présent dans la ligne passée en paramètre 
+        Generates an image for each character present in the line passed as a parameter 
         
         Parameters:
-        ensembles (list)         : liste de listes contenant les coordonnées des contours des lettres.
-        imgLigne (class_Preprocessing.Preprocessing): l'image qui représente la ligne
-        Ligne (tuple(int,int)): un tuple contenant le début et la fin de la ligne
+        ensembles (list)         : list of lists containing the coordinates of the contours of the letters.
+        imgLine (class_Preprocessing.Preprocessing): the image that represents the line
+        Line (tuple(int,int)): a tuple containing the start and end of the line
         
         returns:
-        (list) une liste contenant les images de chaque caractère présent dans la ligne 
+        (list) a list containing the images of each character present in the line
         
         """
         
@@ -320,12 +319,12 @@ class IHWCGenerator :
                 resultats.append(extremite)
             else:
                 [Xmin , Xmax , Ymin, Ymax , extremite1] = extremite
-                hauteur = Ligne[1] - Ligne[0]
+                hauteur = Line[1] - Line[0]
                 largeur = Ymax - Ymin
                 distance = max(hauteur , largeur) 
                 lettreImage = Preprocessing.emptyImage((distance , distance))
                 for (x , coupleY) in extremite1:
                     for y in range( coupleY[0] , coupleY[1] + 1 ):
-                        lettreImage.image[x][y - Ymin + int((hauteur - Ymax + Ymin)/2)] = imgLigne.image[x][y]     
+                        lettreImage.image[x][y - Ymin + int((hauteur - Ymax + Ymin)/2)] = imgLine.image[x][y]     
                 resultats.append(lettreImage)
         return resultats
