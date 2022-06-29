@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home"
+    android:background="@color/violet_junia">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/violet_junia"
+            android:drawableEnd="@drawable/ic_junia_logo_black___1"
+            android:drawableRight="@drawable/ic_junia_logo_black___1"
+            />
+        <Button
+            android:id = "@+id/about_us"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:drawableEnd="@drawable/ic_about_us"
+            android:drawableRight="@drawable/ic_about_us"
+            android:background="@color/violet_junia"
+            />
+    </LinearLayout>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="80dp">
+
+
+        <TextView
+            android:id="@+id/text_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:justificationMode="inter_word"
+            android:textColor="@color/greyJ"
+            android:textSize="16sp" />
+
+
+    </ScrollView>
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/image_view"/>
+
+        <LinearLayout
+            android:background="@color/orange_junia"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            >
+
+
+            <Button
+                android:id="@+id/use_cam"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:drawableRight="@drawable/ic_cam"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Space
+                android:visibility="gone"
+                android:id="@+id/space"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"/>
+
+        <Button
+            android:visibility="gone"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:id="@+id/bt_copy"
+            android:drawableEnd="@drawable/ic_copy"
+            android:drawableRight="@drawable/ic_copy"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
