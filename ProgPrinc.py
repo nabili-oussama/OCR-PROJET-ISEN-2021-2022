@@ -6,9 +6,16 @@ Created on Mon Feb  7 18:51:14 2022
 """
 import numpy as np 
 import string
+
 import tensorflow as tf
 from tensorflow import keras
+
 import cv2
+
+from class_Preprocessing import Preprocessing
+from class_IHWCGenerator import IHWCGenerator
+
+from spellchecker import SpellChecker
 
 def predictModel2(image, h5path):
     
@@ -22,7 +29,7 @@ def predictModel2(image, h5path):
     
     return label
 
-def inverseValeursImage(image):
+def inverseImageValues(image):
     resultat = image.copy()
     for i in range(resultat.shape[0]):
         for j in range(resultat.shape[1]):
@@ -50,70 +57,89 @@ def predictionAlphabet(liste):
     indice = np.argmax(liste)
     return labels[indice]
 
-from class_Preprocessing import Preprocessing
-from class_IHWCGenerator import IHWCGenerator
+
+def spellChecking(txt):
+    
+    spell = SpellChecker()
+
+    corrected_text = ''
+
+    # find those words that may be misspelled
+    misspelled = spell.unknown(text.split())
+
+    for word in misspelled:
+        # Get the one `most likely` answer
+        corrected_text = corrected_text + spell.correction(word)
 
 if __name__ == '__main__':
     #Chargement de l'image
     IMG8 = Preprocessing('p1.jpg')
 
     #Affichage de l'image
-    IMG8.afficherImage()
+    IMG8.showImage()
 
     #Redimensionnement de l'image
-    IMG8.redimensionnerImage(1000)
+    IMG8.resizeImage(1000)
 
-    IMG8.afficherImage()
+    IMG8.showImage()
 
     #Nettoyage de l'image
-    IMG8.nettoyerImage()
+    IMG8.cleanImage()
 
-    IMG8.afficherImage()
+    IMG8.showImage()
 
     #Extraction de lignes de textes 
-    lignes,imgs = IHWCGenerator.ligneText(IMG8)
+    lignes,imgs = IHWCGenerator.lineText(IMG8)
 
     model = tf.keras.models.load_model("my_model.h5")
 
-    model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+    model.compile(loss='categorical_crossentropy', optimizer='SGD', metrics=['accuracy'])
     
     i = 0
-    p=0
+    p = 0
+    
     while i < len(imgs):
 
-        imgs[i].afficherImage()
+        imgs[i].showImage()
         cv2.imwrite("genimages/lignep1{0}.jpg".format(i+1), imgs[i].image)
         
-        ensembles = IHWCGenerator.contourIndiceEntier(imgs[i])
+        ensembles = IHWCGenerator.contourIndexInteger(imgs[i])
         
-        resultat = IHWCGenerator.supprimerEnsemblesInclus(ensembles)
+        resultat = IHWCGenerator.removeIncludedSets(ensembles)
         
-        resultat = IHWCGenerator.fusionnerAccents(resultat)
+        resultat = IHWCGenerator.mergeAccents(resultat)
         
-        resultat = IHWCGenerator.organiserLettres(resultat)
+        resultat = IHWCGenerator.arrangeLetters(resultat)
         
-        resultat = IHWCGenerator.reconstruireImageLettre(resultat, imgs[i], lignes[i])
+        resultat = IHWCGenerator.rebuildImageLetter(resultat, imgs[i], lignes[i])
+        
         text_final = ""
+        
         for j in resultat :   
             if type(j) == str:
-                print("espace")
+                #print("space")
                 text_final = text_final + " "
             else :    
-                j.afficherImage()
+                j.showImage()
                 cv2.imwrite("genimages/p1{0}.jpg".format(p+1), j.image)
-                mot = inverseValeursImage(j.image)/255
+                mot = inverseImageValues(j.image)/255
                 mot = cv2.resize(mot,(32,32))
                 
-                #afficherImage(mot)
+                #showImage(mot)
                 alphabet = predictionAlphabet(model.predict(np.array([mot]))[0])
                 #print(alphabet)
                 text_final = text_final + alphabet
                 
             p+=1
-
         i+=1
-            
-print(text_final)    
+        
+txt = ""
+for word in final_text.split():
+    txt = txt + CorrectionDigits(word) + " "
+    
+txt = spellChecking(txt)
+
+print(txt)    
 
 
 
