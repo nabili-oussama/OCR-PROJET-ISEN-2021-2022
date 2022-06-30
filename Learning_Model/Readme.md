@@ -1,3 +1,3 @@
 #Data Base :
 <\br>
-You can find the data base used in this page : <a href:https://www.kaggle.com/datasets/crawford/emnist>https://www.kaggle.com/datasets/crawford/emnist<\a>
+You can find the data base used in this page : https://www.kaggle.com/datasets/crawford/emnist (precisely the byclass file)
