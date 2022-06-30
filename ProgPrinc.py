@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb  7 18:51:14 2022
-
-@author: oussa
+@author: oussama - reda - harith
 """
 import numpy as np 
 import string
@@ -16,6 +14,8 @@ from class_Preprocessing import Preprocessing
 from class_IHWCGenerator import IHWCGenerator
 
 from spellchecker import SpellChecker
+
+#from PostprocessingModule.py import AlphVsNum, CorrectionDigits, spellChecking
 
 def predictModel2(image, h5path):
     
@@ -57,6 +57,28 @@ def predictionAlphabet(liste):
     indice = np.argmax(liste)
     return labels[indice]
 
+def AlphVsNum(mot):
+    c = 0
+    mot = list(mot)
+    for i in mot:
+        if i in list(string.ascii_uppercase + string.ascii_lowercase):
+            c + = 1
+    return c/(len(mot))
+        
+
+def CorrectionDigits(mot):
+    if AlphVsNum(mot) >= 0.5:
+        mot = list(mot)
+        for i in range(len(mot)):
+            if mot[i] == '0':
+                mot[i] = "O"
+            if mot[i] == '5':
+                mot[i] = "S"
+            if mot[i] == '9':
+                mot[i] = "q"
+            if mot[i] == '8':
+                mot[i] = "j"
+    return "".join(mot)
 
 def spellChecking(txt):
     
@@ -73,7 +95,7 @@ def spellChecking(txt):
 
 if __name__ == '__main__':
     #Chargement de l'image
-    IMG8 = Preprocessing('p1.jpg')
+    IMG8 = Preprocessing('IMG8.jpg') # assurez-vous que l'image est dans le même dossier avec le fichier .py
 
     #Affichage de l'image
     IMG8.showImage()
